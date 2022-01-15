@@ -17,3 +17,5 @@ or
 
 중간에 추가할 때(하나씩 다 추가해줘야함):
 `npm install --save typescript @types/node @types/react @types/react-dom @types/jest`
+
+react에선 파일명이 `.js`가 아닌 `.tsx`로 사용된다
