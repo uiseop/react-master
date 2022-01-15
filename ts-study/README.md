@@ -28,7 +28,34 @@ styled.div<ContainerProps>`
 # interface
 인터페이스는 `객체`가 어떻게 생겼는지 설명해주는거야.
 다른 원시 객체들은 그냥 바로 선언해주면 돼.
+인터페이스에 `?`를 넣어주면 optional한 값이 되게 돼.
 
 ts는 코드가 실행되기 전에 확인해줘서 자잘한 오류를 방지해줘.
 Prop types는 코드 실행 "후" 브라우저에 에러가 나타나지.
 우리가 잘못된 타입의 prop을 보내거나, `필수의` prop을 보내지 않는다면 실행 전에 오류가 발생함을 알려줘.
+
+# useState
+ts는 `default`로 선언된 값을 추론해서 state의 타입을 정하기때문에 `default`값이 정해져있다면 타입을 지정하지 않아도 됩니다.
+
+하지만 `default`값을 선언하지 않을 경우에는 타입을 지정해주는게 좋겠죠?
+그럴땐 useState`<number | string>`(0) 으로 적어주면 됩니디ㅏ.
+
+# input의 target.value
+ts에선 event객체의 타입을 지정하는게 특별합니다.
+어떤 타입인지 모를경우에는 반드시 `구글링`을 해봐합니다. 우린 모든 타입을 모르기떄문입니다. 모른다고 좌절하지 말고, 모든걸 외우려 하지 말고 `구글링`을 하십쇼. 
+
+TS에선 event를 `React.FormEvent<HTMLInputElement>`라고 지정합니다. 그리고 `target.value` 는 `currentTarget.value`라고 지칭한다고 합니다. form태그 안에 있는 태그가 아니면 `React.MouseEvent<HTMLButtonElement>`로 지정합니다.
+
+이는 <a href="https://ko.reactjs.org/docs/events.html">합성 이벤트</a>에서 확인하실 수 있습니다.
+```
+(e:React.FormEvent<HTMLInputElement>) => {
+    setState(e.currentTarget.value)
+}
+```
+이를 통해서 우리는 js가 찾아내지 못하는 오탈자같은 오류들을 쉽게 찾을 수 있습니다.
+e.`prevenDefautl` 같은 오탈자도 찾아준답니다.
+
+# styled.d.ts
+우리는 스타일과 관련된 타입지정 `interface`를 미리 `definition`하는 파일을 만들어서 따로 관리하면 좋다고 합니다.
+따라서 스타일과 관련된 타입은 `styled.d.ts` 파일 안에다 작성해서 꺼내서 씁시다!
+그리고 여기서 선언한 타입들은 `theme.ts`에서 불러다 쓴다고 합니다!!

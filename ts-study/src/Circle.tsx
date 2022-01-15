@@ -1,23 +1,27 @@
 import styled from "styled-components";
+import { useState } from "react";
 
 const Container = styled.div<ContainerProps>`
     width: 100px;
     height: 100px;
     background-color: ${props => props.bgColor};
     border-radius: 50px;
+    border: 5px solid ${props => props.borderColor};
 `;
 
 interface ContainerProps {
     bgColor: string;
-
+    borderColor: string;
 }
 
 interface CircleProps {
     bgColor: string;
+    borderColor?: string;
 }
 
-function Circle({ bgColor }: CircleProps) {
-    return <Container bgColor={bgColor} />;
+function Circle({ bgColor, borderColor }: CircleProps) {
+    const [counter, setCounter] = useState<number|string>(0);
+    return <Container bgColor={bgColor} borderColor={borderColor ?? bgColor} />;
 }
 
 interface PlayerShape {
