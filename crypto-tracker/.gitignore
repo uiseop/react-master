@@ -21,7 +21,3 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-/styled-components/node_modules
-/ts-study/node_modules
-/crypto-tracker/node_modules

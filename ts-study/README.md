@@ -59,3 +59,5 @@ e.`prevenDefautl` 같은 오탈자도 찾아준답니다.
 우리는 스타일과 관련된 타입지정 `interface`를 미리 `definition`하는 파일을 만들어서 따로 관리하면 좋다고 합니다.
 따라서 스타일과 관련된 타입은 `styled.d.ts` 파일 안에다 작성해서 꺼내서 씁시다!
 그리고 여기서 선언한 타입들은 `theme.ts`에서 불러다 쓴다고 합니다!!
+
+styled-components에 `declare module`을 선언한거야. styled-components안에는 인제 DefaultTheme이라는 인터페이스가 적용되는것을 확인할 수 있찌.
