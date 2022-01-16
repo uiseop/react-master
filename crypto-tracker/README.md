@@ -22,3 +22,18 @@
 이건 하나의 컴포넌트를 만들 수 있게 해주는데, 렌더링 될 때, 이 컴포넌트는 전역 스코프에 스타일들을 올려주게 된다고 해. 따라서 Reset CSS같은 전역으로 적용될것은 이걸로 해결할 수 있겠습니다.
 
 이 컴포넌트로 어떤 컴포넌트를 감쌀 필요가 없고 `그냥 선언만 해주면 되는것`
+
+# useEffect에 async/await 적용하기
+기본적으로 useEffect에는 async/await를 적용할 수 없다. 때문에 안에 새로운 함수를 만들고 그 함수를 호출하는 식으로 사용했었는데,
+`즉시 실행함수`로 새로운 함수를 만드는것도 가능하다고 한다. 특이한 기술을 배웠다. 👍👍
+
+# 중요!! ✅✅✅✅Link 컴포넌트에 대해 알아보았다.
+Link에서 이제 state를 넘겨줄 때, to로 한번에 넘기지 않고 state는 state라는 prop을 사용합니다.
+Link에는 더이상 제네릭을 지원하지 않기때문에 ts를 지정하기 위해서는
+```
+const location = useLocation();
+const state = location.state as RouterState; // RouterState는 state의 interface
+```
+위처럼 접근해야 합니다.
+
+그리고 정직하게 Link를 타고 넘어오면 state가 넘겨져서 state값이 보이지만 `Direct`로 접근하면 state가 만들어지지 않아서 다시 호출해야 합니다.
