@@ -19,3 +19,9 @@ or
 `npm install --save typescript @types/node @types/react @types/react-dom @types/jest`
 
 react에선 파일명이 `.js`가 아닌 `.tsx`로 사용된다
+
+## 파일 관리
+`routes` : 사용할 페이지들을 이 폴더에 관리합니다.
+`components` : 페이지들에 사용되는 컴포넌트를 이 폴더에 관리합니다.
+`styled.d.ts` : theme객체에 적용될 타입을 지정합니다.
+`Router.tsx` : `react-router-dom`을 사용해서 라우팅 처리하는 파일입니다. 
