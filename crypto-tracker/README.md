@@ -39,7 +39,7 @@ styled.span<{ isActive: boolean }>
 기본적으로 useEffect에는 async/await를 적용할 수 없다. 때문에 안에 새로운 함수를 만들고 그 함수를 호출하는 식으로 사용했었는데,
 `즉시 실행함수`로 새로운 함수를 만드는것도 가능하다고 한다. 특이한 기술을 배웠다. 👍👍
 
-# 중요!! ✅✅✅✅Link 컴포넌트에 대해 알아보았다.
+# 중요!! ✅Link 컴포넌트에 대해 알아보았다.
 Link에서 이제 state를 넘겨줄 때, to로 한번에 넘기지 않고 state는 state라는 prop을 사용합니다.
 Link에는 더이상 제네릭을 지원하지 않기때문에 ts를 지정하기 위해서는
 ```
@@ -49,3 +49,31 @@ const state = location.state as RouterState; // RouterState는 state의 interfac
 위처럼 접근해야 합니다.
 
 그리고 정직하게 Link를 타고 넘어오면 state가 넘겨져서 state값이 보이지만 `Direct`로 접근하면 state가 만들어지지 않아서 다시 호출해야 합니다.
+
+# React Query❤️❤️❤️
+React Query를 사용하면 우리가 사용했던 `useState`나 `useEffect`같은 Hook들을 사용하지 않아도 된다고 합니다.
+```
+npm i react-query
+```
+react-query를 설치해준다.
+
+```
+const queryClient = new QueryClient();
+
+<QueryClientProvier client={queryClient}>
+ ...
+</QueryClientProvier>
+```
+queryClient를 만들어주고 provider를 만들어주어서 사용한다고 하빈다.
+이 모습은 `createContext`이나 styled-components의 라이트모드/다크모드 적용하던 `ThemeProvider`에서 본 모습이랑 유사합니다.
+`ThemeProvider`랑 마찬가지로 해당 컴포넌트 안에 포함된 모든 컴포넌트는 모두 Provider에 접근할 수 있음을 명시합니다. 
+
+`createContext`는 상태관리를 할 때 봤습니다. 마찬가지로 react query를 사용하면 `서버의` 상태관리를 할 수 있다고 합니다.
+덕분에 fetching, caching, synchronizing, updating할 수 있도록 도와줍니다.
+
+사용방법은 매우 간단하더군요.
+1. 서버의 자원을 `fetching`하는 곳에 `useQuery`라는 Hook을 사용합니다.
+2. `useQuery`안에는 2가지 인자를 받는데, 첫 번째 인자로는 서버의 상태를 캐싱하는데 캐싱한 객체의 키값으로 `Query key`를 사용한다고 합니다.
+2-1. 두 번째 인자로는 서버의 상태를 받아오는 `함수`를 인자로 받습니다. 따라서 우리는 함수를 `api.ts`라는 파일에 따로 관리해서 재사용성을 높여줄 수 있습니다.
+
+3. 2에서 봤듯이 useQuery를 사용하면 서버의 상태를 캐싱한다고 했는데 이 덕분에 우리는 다른 라우터로 이동했다가 다시 처음 페이지로 돌아와도 페이지가 재렌더링 되지 않습니다. `so cool!!👍👍`
