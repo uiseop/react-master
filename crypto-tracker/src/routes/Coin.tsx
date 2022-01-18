@@ -1,6 +1,15 @@
-import { useLocation, useParams } from "react-router-dom";
+import {
+    Route,
+    Routes,
+    useLocation,
+    useParams,
+    Link,
+    useMatch,
+} from "react-router-dom";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
+import Price from "./Price";
+import Chart from "./Chart";
 
 const Container = styled.div`
     padding: 0px 20px;
@@ -8,7 +17,7 @@ const Container = styled.div`
     margin: 0 auto;
 `;
 
-const Header = styled.header`
+const Header = styled(Link)`
     height: 10vh;
     display: flex;
     justify-content: center;
@@ -48,6 +57,27 @@ const OverviewItem = styled.div`
 
 const Description = styled.p`
     margin: 20px 0;
+`;
+
+const TabContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin: 25px 0;
+    gap: 10px;
+`;
+
+const Tab = styled.span<{ isActive: boolean }>`
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 12px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 7px 0;
+    border-radius: 10px;
+    flex: 1;
+    color: ${props => props.isActive ? props.theme.accentColor : props.theme.textColor};
+    a {
+        display: block;
+    }
 `;
 
 interface RouteState {
@@ -116,7 +146,8 @@ function Coin() {
     const [info, setInfo] = useState<InfoData>();
     const [priceInfo, setPriceInfo] = useState<PriceData>();
     const state = location.state as RouteState;
-
+    const priceMatch = location.pathname.endsWith("price");
+    const chartMatch = location.pathname.endsWith("chart");
     useEffect(() => {
         (async () => {
             const res = await fetch(
@@ -135,7 +166,7 @@ function Coin() {
 
     return (
         <Container>
-            <Header>
+            <Header to="/">
                 <Title>
                     {state?.name
                         ? state.name
@@ -173,6 +204,18 @@ function Coin() {
                             <span>{priceInfo?.max_supply}</span>
                         </OverviewItem>
                     </Overview>
+                    <TabContainer>
+                        <Tab isActive={chartMatch}>
+                            <Link to="chart">Chart</Link>
+                        </Tab>
+                        <Tab isActive={priceMatch}>
+                            <Link to="price">Price</Link>
+                        </Tab>
+                    </TabContainer>
+                    <Routes>
+                        <Route path="chart" element={<Chart />} />
+                        <Route path="price" element={<Price />} />
+                    </Routes>
                 </>
             )}
         </Container>
