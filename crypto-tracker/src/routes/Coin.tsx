@@ -10,6 +10,8 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import Price from "./Price";
 import Chart from "./Chart";
+import { useQuery } from "react-query";
+import { fecthPrices, fetchInfos } from "../api";
 
 const Container = styled.div`
     padding: 0px 20px;
@@ -84,7 +86,7 @@ interface RouteState {
     name: string;
 }
 
-interface InfoData {
+interface IInfoData {
     id: string;
     name: string;
     symbol: string;
@@ -105,7 +107,7 @@ interface InfoData {
     last_data_at: string;
 }
 
-interface PriceData {
+interface IPriceData {
     id: string;
     name: string;
     symbol: string;
@@ -139,15 +141,19 @@ interface PriceData {
     };
 }
 
+type RouteParams = {
+    coinId: string;
+}
+
 function Coin() {
-    const { coinId } = useParams();
-    const [loading, setLoading] = useState(true);
+    const { coinId } = useParams() as RouteParams;
     const location = useLocation();
-    const [info, setInfo] = useState<InfoData>();
-    const [priceInfo, setPriceInfo] = useState<PriceData>();
     const state = location.state as RouteState;
     const priceMatch = location.pathname.endsWith("price");
     const chartMatch = location.pathname.endsWith("chart");
+    /* const [info, setInfo] = useState<InfoData>();
+    const [loading, setLoading] = useState(true);
+    const [priceInfo, setPriceInfo] = useState<PriceData>();
     useEffect(() => {
         (async () => {
             const res = await fetch(
@@ -162,8 +168,11 @@ function Coin() {
             setPriceInfo(priceData);
             setLoading(false);
         })();
-    }, [coinId]);
+    }, [coinId]); */
+    const {isLoading: infoLoading, data: infoData} = useQuery<IInfoData>(["infos", coinId], () => fetchInfos(coinId));
+    const {isLoading: priceLoading, data: priceData} = useQuery<IPriceData>(["prices", coinId], () => fecthPrices(coinId));
 
+    const loading = infoLoading || priceLoading;
     return (
         <Container>
             <Header to="/">
@@ -172,7 +181,7 @@ function Coin() {
                         ? state.name
                         : loading
                         ? "loading"
-                        : info?.name}
+                        : infoData?.name}
                 </Title>
             </Header>
             {loading ? (
@@ -182,26 +191,26 @@ function Coin() {
                     <Overview>
                         <OverviewItem>
                             <span>rank:</span>
-                            <span>{info?.rank}</span>
+                            <span>{infoData?.rank}</span>
                         </OverviewItem>
                         <OverviewItem>
                             <span>symbol:</span>
-                            <span>{info?.symbol}</span>
+                            <span>{infoData?.symbol}</span>
                         </OverviewItem>
                         <OverviewItem>
                             <span>open source:</span>
-                            <span>{info?.open_source ? "Yes" : "No"}</span>
+                            <span>{infoData?.open_source ? "Yes" : "No"}</span>
                         </OverviewItem>
                     </Overview>
-                    <Description>{info?.description}</Description>
+                    <Description>{infoData?.description}</Description>
                     <Overview>
                         <OverviewItem>
                             <span>total_suply:</span>
-                            <span>{priceInfo?.total_supply}</span>
+                            <span>{priceData?.total_supply}</span>
                         </OverviewItem>
                         <OverviewItem>
                             <span>Max supply:</span>
-                            <span>{priceInfo?.max_supply}</span>
+                            <span>{priceData?.max_supply}</span>
                         </OverviewItem>
                     </Overview>
                     <TabContainer>
