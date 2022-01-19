@@ -16,6 +16,8 @@
     <Route path="/:coinId/*>" element={<Coin/>} />
     ```
     - 이처럼 부모 요소에 여러 라우팅을 매칭하고 싶다는 `"*"`를 붙여줍니다!
+    -   `nested routes`를 표현할 때 정확한 path를 확인하고 싶으면 `useMatch()`훅을 사용해야 합니다.
+    - 해당 훅은 맞으면 `객체를`, 틀리면 `null을` 반환합니다. 
 
 6. react-router-dom을 사용해서 라우팅 처리를 하기 위해서는 우선 `router context`를 제공해야합니다.
 `router context`는 `<BrowserRouter>`라는 컴포넌트로 모든 `<App>`을 감쌈으로써 제공할 수 있다고 합니다.
@@ -42,6 +44,7 @@ styled.span<{ isActive: boolean }>
 # 중요!! ✅Link 컴포넌트에 대해 알아보았다.
 Link에서 이제 state를 넘겨줄 때, to로 한번에 넘기지 않고 state는 state라는 prop을 사용합니다.
 Link에는 더이상 제네릭을 지원하지 않기때문에 ts를 지정하기 위해서는
+`useLocation()` Hook을 사용해서 Link로 넘겨지는 `state`를 가져올 수 있습니다.
 ```
 const location = useLocation();
 const state = location.state as RouterState; // RouterState는 state의 interface
@@ -74,8 +77,9 @@ queryClient를 만들어주고 provider를 만들어주어서 사용한다고 �
 사용방법은 매우 간단하더군요.
 1. 서버의 자원을 `fetching`하는 곳에 `useQuery`라는 Hook을 사용합니다.
 2. `useQuery`안에는 2가지 인자를 받는데, 첫 번째 인자로는 서버의 상태를 캐싱하는데 캐싱한 객체의 키값으로 `Query key`를 사용한다고 합니다.
-2-1. 두 번째 인자로는 서버의 상태를 받아오는 `함수`를 인자로 받습니다. 따라서 우리는 함수를 `api.ts`라는 파일에 따로 관리해서 재사용성을 높여줄 수 있습니다.
+2-1. 두 번째 인자로는 서버의 상태를 받아오는 `fetcher함수`를 인자로 받습니다. 따라서 우리는 함수를 `api.ts`라는 파일에 따로 관리해서 재사용성을 높여줄 수 있습니다.
 3. useQuery의 `반환값`으로는 객체가 반환되는데 여기서 `isLoading`이라는 프로퍼티에선 서버의 응답이 완료되었는지 Promise의 상태가 나타나고, `data`라는 프로퍼티에선 응답한 데이터가 저장된다고 합니다. 
 4. 2에서 봤듯이 useQuery를 사용하면 서버의 상태를 캐싱한다고 했는데 이 덕분에 우리는 다른 라우터로 이동했다가 다시 처음 페이지로 돌아와도 페이지가 재렌더링 되지 않습니다. `so cool!!👍👍`
 
 5.✔️ 한 개의 useQuery를 사용할때는 괜찮은데 여러개의 useQuery를 사용하면 `반환값의 프로퍼티가 동일하다는 문제` 하나와 `유니크한 키값을 설정하는 문제` 하나가 생깁니다. 때문에 우린 첫번째 문제를 객체에 다른 이름을 줌으로써 해결을 하고, 두번째 문제는 `key`값은 애초에 배열화로 된다는 사실을 바탕으로 `배열`로 유니크한 값을 넣어줌으로써 해결합니다.
+5-1. react-query를 사용할 때 `App.tsx`에서 `<ReactQueryDevtools initialIsOpen={true}/>`를 사용해주면 캐싱된 `state`값을 한눈에 확인할 수 있습니다!!

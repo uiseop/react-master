@@ -149,8 +149,11 @@ function Coin() {
     const { coinId } = useParams() as RouteParams;
     const location = useLocation();
     const state = location.state as RouteState;
-    const priceMatch = location.pathname.endsWith("price");
-    const chartMatch = location.pathname.endsWith("chart");
+    // const priceMatch = location.pathname.endsWith("price");
+    const priceMatch = useMatch("/:coinId/price");
+    // const chartMatch = location.pathname.endsWith("chart");
+    const chartMatch = useMatch("/:coinId/chart");
+    console.log(priceMatch, chartMatch)
     /* const [info, setInfo] = useState<InfoData>();
     const [loading, setLoading] = useState(true);
     const [priceInfo, setPriceInfo] = useState<PriceData>();
@@ -214,10 +217,10 @@ function Coin() {
                         </OverviewItem>
                     </Overview>
                     <TabContainer>
-                        <Tab isActive={chartMatch}>
+                        <Tab isActive={chartMatch !== null}>
                             <Link to="chart">Chart</Link>
                         </Tab>
-                        <Tab isActive={priceMatch}>
+                        <Tab isActive={priceMatch !== null}>
                             <Link to="price">Price</Link>
                         </Tab>
                     </TabContainer>
