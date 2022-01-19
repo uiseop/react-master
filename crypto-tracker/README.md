@@ -89,3 +89,15 @@ queryClient를 만들어주고 provider를 만들어주어서 사용한다고 �
 
 # apexcharts.js 그래프 그리기 라이브러리
 <img src="./apexchart.png">
+
+# React Helmemt
+이건 `컴포넌트`인데 여기서 무엇을 render하던 그게 문서의 head로 가는것이라고 해.
+즉, 문서의 head로의 direct link가 적용된다고 합니다.
+때문에 css나 favicon같은 것들도 컴포넌트단에서 동적으로 적용할 수 있도록 도와줍니다.
+
+
+# Refactoring
+
+1. Home화면을 만들어보자
+- Home화면에서는 Crypto Tracker라는 제목을 애니메이션으로 재밌게 줘 본다.
+- Helmet을 사용해서 doc의 head-title에 접근한다

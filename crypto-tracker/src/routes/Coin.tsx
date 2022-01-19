@@ -12,6 +12,7 @@ import Price from "./Price";
 import Chart from "./Chart";
 import { useQuery } from "react-query";
 import { fetchInfos, fetchPrices } from "../api";
+import { Helmet } from "react-helmet"
 
 const Container = styled.div`
     padding: 0px 20px;
@@ -185,6 +186,13 @@ function Coin() {
     const loading = infoLoading || priceLoading;
     return (
         <Container>
+            <Helmet>
+                <title>{state?.name
+                        ? state.name
+                        : loading
+                        ? "loading"
+                        : infoData?.name}</title>
+            </Helmet>
             <Header to="/">
                 <Title>
                     {state?.name
@@ -234,7 +242,7 @@ function Coin() {
                     <Routes>
                         <Route
                             path="chart"
-                            element={<Chart coinId={coinId} />}
+                            element={<Chart coinId={coinId} coinName={infoData!.name} />}
                         />
                         <Route path="price" element={<Price />} />
                     </Routes>

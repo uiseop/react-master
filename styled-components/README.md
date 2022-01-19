@@ -9,6 +9,16 @@ styled-components를 사용해서 스타일링과 관한 기초 실습을 진행
 - 확장이라는 기능을 제공한다
 - 컴포넌트에 html 속성을 부여할 수 있다
 - 애니메이션을 마치 변수를 사용하듯이 사용할 수 있다
+```
+const animation = keyframes`
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+`
+```
 - 선택자를 SASS처럼 사용할 수 있다
 - 컴포넌트 자체도 변수처럼 선택자로 사용할 수 있다
 - css-module처럼 해당 컴포넌트 안에 있는 컴포넌트들만을 스타일링 해 줄 수 있다

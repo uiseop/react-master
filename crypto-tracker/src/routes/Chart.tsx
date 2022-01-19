@@ -4,6 +4,7 @@ import ApexChart from "react-apexcharts";
 
 interface ChartProps {
     coinId: string;
+    coinName: string;
 }
 
 interface IHistorical {
@@ -17,39 +18,51 @@ interface IHistorical {
     market_cap: number;
 }
 
-function Chart({ coinId }: ChartProps) {
-    const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv", coinId], () =>
-        fetchCoinHistory(coinId),
+function Chart({ coinId, coinName }: ChartProps) {
+    const { isLoading, data } = useQuery<IHistorical[]>(
+        ["ohlcv", coinId],
+        () => fetchCoinHistory(coinId),
         {
             refetchInterval: 10000,
         }
     );
 
     const categories = data?.map((date) => date.time_open);
+    const seriesData = data?.map((d) => ({
+        x: d.time_open,
+        y: [d.open.toFixed(3), d.high.toFixed(3), d.low.toFixed(3), d.close.toFixed(3)],
+    }));
     return (
         <div>
             {isLoading ? (
                 "Loading chart..."
             ) : (
                 <ApexChart
-                    type="line"
+                    type="candlestick"
                     series={[
                         {
-                            name: `${coinId}`,
-                            data: data?.map((price) => price.close),
+                            data: seriesData,
                         },
                     ]}
                     options={{
+                        title: {
+                            text: `${coinName} chart`,
+                            align: "left",
+                        },
                         theme: {
                             mode: "dark",
                         },
                         chart: {
+                            type: "candlestick",
                             height: 300,
                             width: 500,
                             toolbar: {
                                 show: false,
                             },
                             background: "transparent",
+                            zoom: {
+                                enabled: false,
+                            },
                         },
                         grid: {
                             show: false,
@@ -58,29 +71,16 @@ function Chart({ coinId }: ChartProps) {
                             show: false,
                         },
                         xaxis: {
-                            axisBorder: {
-                                show: false,
-                            },
-                            axisTicks: {
-                                show: false,
-                            },
                             type: "datetime",
-                            categories: categories,
-                            labels: {
-                                show: false,
+                        },
+                        plotOptions: {
+                            candlestick: {
+                                colors: {
+                                    upward: "#3C90EB",
+                                    downward: "#DF7D46",
+                                },
                             },
                         },
-                        stroke: {
-                            curve: "smooth",
-                        },
-                        fill: {
-                            type: "gradient",
-                            gradient: {
-                                gradientToColors: ["#C4E538"],
-                                stops: [0, 100],
-                            },
-                        },
-                        colors: ["#12CBC4"],
                         tooltip: {
                             y: {
                                 formatter: (value) => `$${value.toFixed(3)}`,

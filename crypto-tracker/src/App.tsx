@@ -57,12 +57,28 @@ table {
 }
 body {
   font-family: 'Source Sans Pro', sans-serif;
-  background-color: ${(props) => props.theme.bgColor};
   color: ${(props) => props.theme.textColor};
 }
 a {
   text-decoration: none;
   color: inherit;
+}
+#root {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background: url("https://mcs.pt/wp-content/uploads/2021/11/Promo-Facebook-Facebook-event-image21.jpeg") no-repeat;
+  background-size: cover;
+  position: relative;
+  &::before {
+    content: "";
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(41, 48, 71, 0.7);
+  }
 }
 `;
 
