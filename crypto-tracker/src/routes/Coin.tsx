@@ -76,7 +76,8 @@ const Tab = styled.span<{ isActive: boolean }>`
     padding: 7px 0;
     border-radius: 10px;
     flex: 1;
-    color: ${props => props.isActive ? props.theme.accentColor : props.theme.textColor};
+    color: ${(props) =>
+        props.isActive ? props.theme.accentColor : props.theme.textColor};
     a {
         display: block;
     }
@@ -143,7 +144,7 @@ interface IPriceData {
 
 type RouteParams = {
     coinId: string;
-}
+};
 
 function Coin() {
     const { coinId } = useParams() as RouteParams;
@@ -171,8 +172,15 @@ function Coin() {
             setLoading(false);
         })();
     }, [coinId]); */
-    const {isLoading: infoLoading, data: infoData} = useQuery<IInfoData>(["infos", coinId], () => fetchInfos(coinId));
-    const {isLoading: priceLoading, data: priceData} = useQuery<IPriceData>(["prices", coinId], () => fetchPrices(coinId));
+    const { isLoading: infoLoading, data: infoData } = useQuery<IInfoData>(
+        ["infos", coinId],
+        () => fetchInfos(coinId)
+    );
+    const { isLoading: priceLoading, data: priceData } = useQuery<IPriceData>(
+        ["prices", coinId],
+        () => fetchPrices(coinId),
+        { refetchInterval: 5000 }
+    );
 
     const loading = infoLoading || priceLoading;
     return (
@@ -200,8 +208,8 @@ function Coin() {
                             <span>{infoData?.symbol}</span>
                         </OverviewItem>
                         <OverviewItem>
-                            <span>open source:</span>
-                            <span>{infoData?.open_source ? "Yes" : "No"}</span>
+                            <span>price:</span>
+                            <span>${priceData?.quotes.USD.price.toFixed(3)}</span>
                         </OverviewItem>
                     </Overview>
                     <Description>{infoData?.description}</Description>
@@ -224,7 +232,10 @@ function Coin() {
                         </Tab>
                     </TabContainer>
                     <Routes>
-                        <Route path="chart" element={<Chart coinId={coinId}/>} />
+                        <Route
+                            path="chart"
+                            element={<Chart coinId={coinId} />}
+                        />
                         <Route path="price" element={<Price />} />
                     </Routes>
                 </>
