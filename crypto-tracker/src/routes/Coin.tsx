@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import Price from "./Price";
 import Chart from "./Chart";
 import { useQuery } from "react-query";
-import { fecthPrices, fetchInfos } from "../api";
+import { fetchInfos, fetchPrices } from "../api";
 
 const Container = styled.div`
     padding: 0px 20px;
@@ -153,7 +153,6 @@ function Coin() {
     const priceMatch = useMatch("/:coinId/price");
     // const chartMatch = location.pathname.endsWith("chart");
     const chartMatch = useMatch("/:coinId/chart");
-    console.log(priceMatch, chartMatch)
     /* const [info, setInfo] = useState<InfoData>();
     const [loading, setLoading] = useState(true);
     const [priceInfo, setPriceInfo] = useState<PriceData>();
@@ -173,7 +172,7 @@ function Coin() {
         })();
     }, [coinId]); */
     const {isLoading: infoLoading, data: infoData} = useQuery<IInfoData>(["infos", coinId], () => fetchInfos(coinId));
-    const {isLoading: priceLoading, data: priceData} = useQuery<IPriceData>(["prices", coinId], () => fecthPrices(coinId));
+    const {isLoading: priceLoading, data: priceData} = useQuery<IPriceData>(["prices", coinId], () => fetchPrices(coinId));
 
     const loading = infoLoading || priceLoading;
     return (
@@ -225,7 +224,7 @@ function Coin() {
                         </Tab>
                     </TabContainer>
                     <Routes>
-                        <Route path="chart" element={<Chart />} />
+                        <Route path="chart" element={<Chart coinId={coinId}/>} />
                         <Route path="price" element={<Price />} />
                     </Routes>
                 </>

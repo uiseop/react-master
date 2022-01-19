@@ -16,7 +16,7 @@
     <Route path="/:coinId/*>" element={<Coin/>} />
     ```
     - 이처럼 부모 요소에 여러 라우팅을 매칭하고 싶다는 `"*"`를 붙여줍니다!
-    -   `nested routes`를 표현할 때 정확한 path를 확인하고 싶으면 `useMatch()`훅을 사용해야 합니다.
+    -  ✅`nested routes`를 표현할 때 정확한 path를 확인하고 싶으면 `useLocation()`대신 `useMatch()`훅을 사용해야 합니다.
     - 해당 훅은 맞으면 `객체를`, 틀리면 `null을` 반환합니다. 
 
 6. react-router-dom을 사용해서 라우팅 처리를 하기 위해서는 우선 `router context`를 제공해야합니다.
@@ -83,3 +83,6 @@ queryClient를 만들어주고 provider를 만들어주어서 사용한다고 �
 
 5.✔️ 한 개의 useQuery를 사용할때는 괜찮은데 여러개의 useQuery를 사용하면 `반환값의 프로퍼티가 동일하다는 문제` 하나와 `유니크한 키값을 설정하는 문제` 하나가 생깁니다. 때문에 우린 첫번째 문제를 객체에 다른 이름을 줌으로써 해결을 하고, 두번째 문제는 `key`값은 애초에 배열화로 된다는 사실을 바탕으로 `배열`로 유니크한 값을 넣어줌으로써 해결합니다.
 5-1. react-query를 사용할 때 `App.tsx`에서 `<ReactQueryDevtools initialIsOpen={true}/>`를 사용해주면 캐싱된 `state`값을 한눈에 확인할 수 있습니다!!
+
+# apexcharts.js 그래프 그리기 라이브러리
+<img src="./apexchart.png">
