@@ -71,7 +71,7 @@ a {
   align-items: center;
   background: url("https://mcs.pt/wp-content/uploads/2021/11/Promo-Facebook-Facebook-event-image21.jpeg") no-repeat;
   background-size: cover;
-  position: relative;
+  position: fixed;
   &::before {
     content: "";
     position: fixed;
