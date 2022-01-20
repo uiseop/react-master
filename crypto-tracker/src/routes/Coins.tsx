@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { fetchCoins } from "../api";
 import { Helmet } from "react-helmet";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "./atoms";
 
 const Header = styled.header`
     height: 10vh;
@@ -16,7 +18,7 @@ const Nav = styled.nav<{ isActive: boolean }>`
     position: fixed;
     width: 300px;
     height: 100%;
-    z-index: ${props => props.isActive ? 3 : 0};
+    z-index: ${(props) => (props.isActive ? 3 : 0)};
     left: ${(props) => (props.isActive ? "0" : "-300px")};
     background-color: rgba(41, 48, 71, 0.7);
     overflow-y: scroll;
@@ -80,15 +82,21 @@ const Btn = styled.div<{ isActive: boolean }>`
     position: absolute;
     top: 15px;
     left: ${(props) => (props.isActive ? "345px" : "45px")};
-    z-index: ${props => props.isActive ? 3 : 0};
-    width: 45px;
-    height: 45px;
+    z-index: ${(props) => (props.isActive ? 3 : 0)};
+    font-size: 45px;
+    padding: 10px;
     cursor: pointer;
     transition: left 0.4s ease;
     & i {
         font-size: 28px;
         line-height: 45px;
     }
+`;
+
+const Toggle = styled.button`
+    position: absolute;
+    top: 45px;
+    right: 45px;
 `;
 
 interface CoinInterface {
@@ -120,7 +128,10 @@ function Coins() {
         "allCoins",
         fetchCoins
     );
-    const {pathname} = useLocation();
+    const { pathname } = useLocation();
+    const isDark = useRecoilValue(isDarkAtom);
+    const setIsDark = useSetRecoilState(isDarkAtom);
+    const toggleDarkAtom = () => setIsDark((prev) => !prev);
 
     function openSidebar() {
         setIsActive((cur) => !cur);
@@ -133,6 +144,7 @@ function Coins() {
             <Btn onClick={openSidebar} isActive={isActive}>
                 <i className={isActive ? "fas fa-times" : "fas fa-bars"}></i>
             </Btn>
+            <Toggle onClick={toggleDarkAtom}>{isDark ? "라이트모드" : "다크 모드"}</Toggle>
             {isLoading ? (
                 <Loader>Loading...</Loader>
             ) : (
@@ -145,7 +157,12 @@ function Coins() {
                         </Coin>
                         {data?.slice(0, 100).map((coin, idx) => {
                             return (
-                                <Coin key={coin.id} isActive={pathname.split("/")[1] === coin.id}>
+                                <Coin
+                                    key={coin.id}
+                                    isActive={
+                                        pathname.split("/")[1] === coin.id
+                                    }
+                                >
                                     <Link
                                         to={`/${coin.id}`}
                                         state={{ name: coin.name }}

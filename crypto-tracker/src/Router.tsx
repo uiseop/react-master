@@ -5,7 +5,7 @@ import Home from "./routes/Home";
 
 function Router() {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Coins/>
             <Routes>
                 <Route path="/:coinId/*" element={<Coin />} />

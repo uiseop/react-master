@@ -1,7 +1,10 @@
-import React from "react";
-import { createGlobalStyle } from "styled-components";
+import React, { useState } from "react";
+import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import Router from "./Router";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { darkTheme, lightTheme } from "./theme";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "./routes/atoms";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -75,19 +78,23 @@ a {
   &::before {
     content: "";
     position: fixed;
+    z-index: -1;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(41, 48, 71, 0.7);
+    background-color: ${(props) => props.theme.dimmedColor};
   }
 }
 `;
 
 function App() {
+    const isDark = useRecoilValue(isDarkAtom);
     return (
         <React.Fragment>
-            <Router />
-            <GlobalStyle />
-            <ReactQueryDevtools initialIsOpen={true}/>
+            <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+                <Router />
+                <GlobalStyle />
+                <ReactQueryDevtools initialIsOpen={true} />
+            </ThemeProvider>
         </React.Fragment>
     );
 }
