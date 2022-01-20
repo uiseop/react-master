@@ -101,3 +101,6 @@ queryClient를 만들어주고 provider를 만들어주어서 사용한다고 �
 1. Home화면을 만들어보자
 - Home화면에서는 Crypto Tracker라는 제목을 애니메이션으로 재밌게 줘 본다.
 - Helmet을 사용해서 doc의 head-title에 접근한다
+
+2. 공통부분인 사이드 바 부분은 Routes로 처리하기 전에 선언하면 전역으로 사용된다.
+    - Router에서 공통 부분은 미리 처리하고, 바뀌는 부분만 Routes로 다른 라우팅 처리를 한다.
