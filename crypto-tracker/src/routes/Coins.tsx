@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useMatch } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
@@ -12,11 +12,12 @@ const Header = styled.header`
     align-items: center;
 `;
 
-const Nav = styled.nav<{isActive: boolean}>`
+const Nav = styled.nav<{ isActive: boolean }>`
     position: fixed;
     width: 300px;
     height: 100%;
-    left: ${(props) => props.isActive ? "0" : "-300px"};
+    z-index: ${props => props.isActive ? 3 : 0};
+    left: ${(props) => (props.isActive ? "0" : "-300px")};
     background-color: rgba(41, 48, 71, 0.7);
     overflow-y: scroll;
     &::-webkit-scrollbar {
@@ -25,20 +26,21 @@ const Nav = styled.nav<{isActive: boolean}>`
     transition: left 0.4s ease;
 `;
 
-const CoinsList = styled.ul`
-    padding-top: 5px;
-`;
+const CoinsList = styled.ul``;
 
-const Coin = styled.li`
+const Coin = styled.li<{ isActive?: boolean }>`
     color: ${(props) => props.theme.bgColor};
     margin-bottom: 10px;
     border-radius: 15px;
     a {
+        background-color: ${(props) =>
+            props.isActive ? "rgba(255, 255, 255, 0.2)" : ""};
         display: flex;
         align-items: center;
         padding: 20px;
         transition: color 0.2s ease-in;
-        color: ${(props) => props.theme.textColor};
+        color: ${(props) =>
+            props.isActive ? props.theme.accentColor : props.theme.textColor};
         font-weight: bold;
     }
     &:hover {
@@ -48,7 +50,7 @@ const Coin = styled.li`
     }
     & span {
         position: relative;
-        top: 3px;
+        top: -5px;
         font-size: 5px;
         color: #e84118;
     }
@@ -74,52 +76,11 @@ const Img = styled.img`
     margin-right: 10px;
 `;
 
-const blinkCursor = keyframes`
-    0% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-`;
-
-const typing = keyframes`
-    0% {
-        width: 0;
-    }
-    100% {
-        width: 857.083px;
-    }
-`;
-
-const H1 = styled.h1`
-    position: relative;
-    text-transform: uppercase;
-    color: #fff;
-    font-size: 100px;
-    font-weight: 700;
-    overflow: hidden;
-    white-space: nowrap;
-    animation: ${typing} 3s steps(14);
-    &::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 5px;
-        height: 100%;
-        background: #fff;
-        animation: ${blinkCursor} 1s linear infinite;
-    }
-`;
-
-const Btn = styled.div<{isActive: boolean}>`
+const Btn = styled.div<{ isActive: boolean }>`
     position: absolute;
     top: 15px;
-    left: ${(props) => props.isActive ? "345px" : "45px"};
+    left: ${(props) => (props.isActive ? "345px" : "45px")};
+    z-index: ${props => props.isActive ? 3 : 0};
     width: 45px;
     height: 45px;
     cursor: pointer;
@@ -153,21 +114,22 @@ function Coins() {
             setLoading(false);
         })();
     }, []);*/
+    const isHomeMatch = useMatch("/");
     const [isActive, setIsActive] = useState(false);
     const { isLoading, data } = useQuery<CoinInterface[]>(
         "allCoins",
         fetchCoins
     );
+    const {pathname} = useLocation();
 
     function openSidebar() {
-        setIsActive((cur) => !cur)
+        setIsActive((cur) => !cur);
     }
     return (
         <>
             <Helmet>
                 <title>코인</title>
             </Helmet>
-            <H1>Crypto tracker</H1>
             <Btn onClick={openSidebar} isActive={isActive}>
                 <i className={isActive ? "fas fa-times" : "fas fa-bars"}></i>
             </Btn>
@@ -176,23 +138,27 @@ function Coins() {
             ) : (
                 <Nav isActive={isActive}>
                     <CoinsList>
-                        <Coin key="home">
-                            <Link to="/"><i className="fas fa-home"></i>Home</Link>
+                        <Coin key="home" isActive={isHomeMatch !== null}>
+                            <Link to="/">
+                                <i className="fas fa-home"></i>Home
+                            </Link>
                         </Coin>
-                        {data?.slice(0, 100).map((coin, idx) => (
-                            <Coin key={coin.id}>
-                                <Link
-                                    to={`/${coin.id}`}
-                                    state={{ name: coin.name }}
-                                >
-                                    <Img
-                                        src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
-                                    />
-                                    {coin.name}
-                                    <span>{coin.symbol}</span>
-                                </Link>
-                            </Coin>
-                        ))}
+                        {data?.slice(0, 100).map((coin, idx) => {
+                            return (
+                                <Coin key={coin.id} isActive={pathname.split("/")[1] === coin.id}>
+                                    <Link
+                                        to={`/${coin.id}`}
+                                        state={{ name: coin.name }}
+                                    >
+                                        <Img
+                                            src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                                        />
+                                        {coin.name}
+                                        <span>{coin.symbol}</span>
+                                    </Link>
+                                </Coin>
+                            );
+                        })}
                     </CoinsList>
                 </Nav>
             )}

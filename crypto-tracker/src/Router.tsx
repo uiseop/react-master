@@ -6,9 +6,10 @@ import Home from "./routes/Home";
 function Router() {
     return (
         <BrowserRouter>
+            <Coins/>
             <Routes>
                 <Route path="/:coinId/*" element={<Coin />} />
-                <Route path="/" element={<Coins />} />
+                <Route path="/" element={<Home />} />
             </Routes>
         </BrowserRouter>
     );
