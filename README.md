@@ -45,5 +45,8 @@ recoil을 설치한 뒤 전역적으로 사용하기 위해 Provider를 index.ts
 ```
 const isDark = useRecoilValue(설정한 atom이름);
 const setterFn = useSetRecoilState(설정한 atom이름);
+
+==========OR=============
+const [x, setX] = useRecoilState(설정한 atom이름); // useState()처럼 사용할 수 있어.
 ```
 `setterFn`은 useState()함수처럼 현재 값을 인자로 받을 수 있어.
