@@ -102,3 +102,21 @@ export default ToDoList;
 # TS 문자열 선택하기
 category 항목에는 todo, doing, done이라는 문자열만 허락하고 싶을 경우. `category: string;`으로 하면 안되고 간단하게 `category: "todo"|"doing"|"done";`이라고 작성해주면 된다.
 
+# Recoil의 Selector함수 사용하기
+- 하나의 atom으로 여러 세분화된 선택을 할 수 있도록 해줘.
+- 가령 atom안에 3개의 `category`가 있다고 가정해보자. 굳이 3개의 atom으로 만들 필요 없이 selector를 사용해 하나의 atom을 사용할 수 있다고 해
+
+```
+export const toDoSelector = selector({
+    key: "toDoSelector",
+    get: ({ get }) => {
+        const todos = get(toDoState);
+        return [
+            todos.filter((todo) => todo.category === "TO_DO"),
+            todos.filter((todo) => todo.category === "DOING"),
+            todos.filter((todo) => todo.category === "DONE"),
+        ];
+    },
+});
+```
+여기서 `get`은 options를 인자로 받는데, 이 `options`는 `get`이라는 메서드를 갖고 있어서 `get`으로 `atom`을 가져올 수 있도록 도와줘. 
