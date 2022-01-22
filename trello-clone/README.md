@@ -120,3 +120,5 @@ export const toDoSelector = selector({
 });
 ```
 여기서 `get`은 options를 인자로 받는데, 이 `options`는 `get`이라는 메서드를 갖고 있어서 `get`으로 `atom`을 가져올 수 있도록 도와줘. 
+
+selector를 사용함으로써 개별적으로 나뉜 atom들을 합칠 수 있는 것. 입맛에 따라
