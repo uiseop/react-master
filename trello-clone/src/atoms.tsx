@@ -13,7 +13,7 @@ export interface ITodo {
 }
 
 export const categoryState = atom<Categories>({
-    key: "category",
+    key: "category", 
     default: Categories.TO_DO,
 });
 

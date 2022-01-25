@@ -45,7 +45,7 @@ styled.span<{ isActive: boolean }>
 Link에서 이제 state를 넘겨줄 때, to로 한번에 넘기지 않고 state는 state라는 prop을 사용합니다.
 Link에는 더이상 제네릭을 지원하지 않기때문에 ts를 지정하기 위해서는
 `useLocation()` Hook을 사용해서 Link로 넘겨지는 `state`를 가져올 수 있습니다.
-```
+```javascript
 const location = useLocation();
 const state = location.state as RouterState; // RouterState는 state의 interface
 ```
@@ -60,7 +60,7 @@ npm i react-query
 ```
 react-query를 설치해준다.
 
-```
+```javascript
 const queryClient = new QueryClient();
 
 <QueryClientProvier client={queryClient}>
@@ -82,7 +82,7 @@ queryClient를 만들어주고 provider를 만들어주어서 사용한다고 �
 4. 2에서 봤듯이 useQuery를 사용하면 서버의 상태를 캐싱한다고 했는데 이 덕분에 우리는 다른 라우터로 이동했다가 다시 처음 페이지로 돌아와도 페이지가 재렌더링 되지 않습니다. `so cool!!👍👍`
 
 5.✔️ 한 개의 useQuery를 사용할때는 괜찮은데 여러개의 useQuery를 사용하면 `반환값의 프로퍼티가 동일하다는 문제` 하나와 `유니크한 키값을 설정하는 문제` 하나가 생깁니다. 때문에 우린 첫번째 문제를 객체에 다른 이름을 줌으로써 해결을 하고, 두번째 문제는 `key`값은 애초에 배열화로 된다는 사실을 바탕으로 `배열`로 유니크한 값을 넣어줌으로써 해결합니다. 마지막 세번째는 서버에서 데이터를 받아오는 `주기`를 설정해줄 수 있습니다. 때문에 사용자는 매번 최신의 데이터를 확인할 수 있죠. 
-```
+```javascript
 { refetchInterval: 5000 } // 이처럼 사용하면 된다고 합니다.
 ```
 5-1. react-query를 사용할 때 `App.tsx`에서 `<ReactQueryDevtools initialIsOpen={true}/>`를 사용해주면 캐싱된 `state`값을 한눈에 확인할 수 있습니다!!

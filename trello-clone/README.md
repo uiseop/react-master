@@ -13,7 +13,7 @@ Form태그를 처리하기 위해서는 입력 값들을 저장하는 여러개�
 
 위의 모든 과정을 단 한줄로 끝내준다고 합니다.
 
-```
+```javascript
 npm i react-hook-form
 const { register, watch, handleSubmit } = useForm<IForm>({
       defaultValues: {
@@ -39,14 +39,14 @@ const { register, watch, handleSubmit } = useForm<IForm>({
 -   useForm의 register함수와 watch함수를 사용해서 하나 하나 `useState`, `setState`를 설정해주지 않아도 `onChange`, `onBlur` 등의 함수가 내장되어서 훨 씬 쉽고 간결하게 코드를 짤 수 있게 도와줍니다.
 -   `handleSubmit`은 onSubmit을 담당합니다. (다있네유 증말루)
 
-```
+```javascript
 handleSubmit(onValid함수, inValid함수(필수x))
 ```
 
 위 코드처럼 작성하면 되고, onValid함수는 입력타입이 `Valid할 경우`에 실행되는 함수입니다.
 가령
 
-```
+```javascript
 <input
             {...register("email", {
               required: "Email is required",
@@ -69,7 +69,7 @@ handleSubmit(onValid함수, inValid함수(필수x))
 이처럼 작성되어있으면 `input필드`가 비어있으면 inValid함수가 실행되면서 어디서 오류가 발생했는지 알려줘.(Input태그의 required를 사용하지 않는 이유는, 사용자가 임의로 그 코드를 지우면 HTML이 valid를 보장해주지 못해, 혹은 required를 지원하지 않는 브라우저에서의 문제도 있음)
 
 
-```
+```javascript
 // default Settings
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -106,7 +106,7 @@ category 항목에는 todo, doing, done이라는 문자열만 허락하고 싶�
 - 하나의 atom으로 여러 세분화된 선택을 할 수 있도록 해줘.
 - 가령 atom안에 3개의 `category`가 있다고 가정해보자. 굳이 3개의 atom으로 만들 필요 없이 selector를 사용해 하나의 atom을 사용할 수 있다고 해
 
-```
+```javascript
 export const toDoSelector = selector({
     key: "toDoSelector",
     get: ({ get }) => {

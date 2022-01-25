@@ -42,7 +42,7 @@ npm i recoil
 ```
 recoil을 설치한 뒤 전역적으로 사용하기 위해 Provider를 index.tsx에 선언해줘야 선언한 모든 Atom들을 사용할 수 있다고 해.
 그리고 Atoms.ts에서 선언한 atom들을 `필요할때마다` 불러와서 사용하면 끝!. `so easy~!!`
-```
+```javascript
 const isDark = useRecoilValue(설정한 atom이름);
 const setterFn = useSetRecoilState(설정한 atom이름);
 
