@@ -8,12 +8,15 @@ create-react-app으로 reat 초기 환경을 만들게 되면 여러 파일들�
 # 사전 필요한 요소들 설치 방법
 
 ## styled-componets 적용하는 방법
-```npm i styled-components```
-## TypeScript 적용하는 방법
-처음 시작할 때:
-```npx create-react-app 앱이름 --template typescript```
 
-or 
+`npm i styled-components`
+
+## TypeScript 적용하는 방법
+
+처음 시작할 때:
+`npx create-react-app 앱이름 --template typescript`
+
+or
 
 중간에 추가할 때(하나씩 다 추가해줘야함):
 `npm install --save typescript @types/node @types/react @types/react-dom @types/jest`
@@ -21,10 +24,11 @@ or
 react에선 파일명이 `.js`가 아닌 `.tsx`로 사용된다
 
 ## 파일 관리
+
 `routes` : 사용할 페이지들을 이 폴더에 관리합니다.
 `components` : 페이지들에 사용되는 컴포넌트를 이 폴더에 관리합니다.
 `styled.d.ts` : theme객체에 적용될 타입을 지정합니다.
-`Router.tsx` : `react-router-dom`을 사용해서 라우팅 처리하는 파일입니다. 
+`Router.tsx` : `react-router-dom`을 사용해서 라우팅 처리하는 파일입니다.
 
 ## 라이트모드/다크모드
 
@@ -40,8 +44,10 @@ react에선 파일명이 `.js`가 아닌 `.tsx`로 사용된다
 ```
 npm i recoil
 ```
+
 recoil을 설치한 뒤 전역적으로 사용하기 위해 Provider를 index.tsx에 선언해줘야 선언한 모든 Atom들을 사용할 수 있다고 해.
 그리고 Atoms.ts에서 선언한 atom들을 `필요할때마다` 불러와서 사용하면 끝!. `so easy~!!`
+
 ```javascript
 const isDark = useRecoilValue(설정한 atom이름); // Value만 필요하면 이걸 사용하지
 const setterFn = useSetRecoilState(설정한 atom이름); // atom의 value를 변경하는 함수만 필요하면 이걸 써!
@@ -49,24 +55,66 @@ const setterFn = useSetRecoilState(설정한 atom이름); // atom의 value를 �
 ==========OR=============
 const [x, setX] = useRecoilState(설정한 atom이름); // useState()처럼 사용할 수 있어.(둘 다 사용할 때 이걸 쓰지)
 ```
+
 `setterFn`은 useState()함수처럼 현재 값을 인자로 받을 수 있어.
 
 ```javascript
 const hourSelector = selector({
     key: "hours",
-    get: ({get}) => {
+    get: ({ get }) => {
         const minutes = get(minuteState);
         return minutes / 60;
     },
-    set: ({set}, newValue) => {
+    set: ({ set }, newValue) => {
         const minutes = newValue * 60;
         set(minuteState, minutes); // useRecoilState(hourSelector)을 사용해서 minuteState atom을 수정할 수 있다.
-    }
-})
+    },
+});
 ```
+
 이처럼 정의한 `hour atom`이 변할때마다 변화를 감지해주는 `selector`, 마치 `useEffect`처럼 사용이 가능하지.
 또한 `setter`를 사용해서 atom을 굳이 2개 만들지 않고도 하나가 변경되면 나머지도 변경되도록 하는 useEffect나 useMemo같은 기능을 상태관리에서도 사용할 수 있게 됐어!
 
 ## react-beautiful-dnd
 
 <img src="https://user-images.githubusercontent.com/2182637/53607406-c8f3a780-3c12-11e9-979c-7f3b5bd1bfbd.gif"/>
+
+이 라이브러리는 그림처럼 요소를 드래그해서 사용할 수 있도록 해 줍니다.
+그러기 위해서는 `DragDropContext`로 감싸주고, `Droppable`영역을 만든 후에 `Draggable`요소들을 작성하면 된다고 합니다.
+
+```javascript
+<DragDropContext onDragEnd={onDragEnd}>
+    <div>
+        <Droppable droppableId="one">
+            // droppableid와 children이 필요한데 children은 함수여야만 한다고
+            해.
+            {(magic) => (
+                <ul ref={magic.innerRef} {...magic.droppableProps}>
+                    // 마찬가지로 함수로 작성해야해. 왜?! Magic을 부릴거니까
+                    <Draggable draggableId="first" index={0}>
+                        {(magic) => (
+                            // 여기서 ✅에 magic.dragHandleProps를 제공해서 ✅를 통해서만 드래그가 가능해
+                            <li ref={magic.innerRef} {...magic.draggableProps}>
+                                <span {...magic.dragHandleProps}>✅</span>
+                                One
+                            </li>
+                        )}
+                    </Draggable>
+                    <Draggable draggableId="second" index={1}>
+                        {(magic) => (
+                            <li
+                                ref={magic.innerRef}
+                                {...magic.draggableProps}
+                                {...magic.dragHandleProps}
+                            >
+                                Two
+                            </li>
+                        )}
+                    </Draggable>
+                </ul>
+            )}
+        </Droppable>
+    </div>
+</DragDropContext>
+// 그냥 innerRef랑 droppableProps, draggableProps 객체들만 넘겨준게 끝이야. cool!
+```
