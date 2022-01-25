@@ -43,10 +43,30 @@ npm i recoil
 recoil을 설치한 뒤 전역적으로 사용하기 위해 Provider를 index.tsx에 선언해줘야 선언한 모든 Atom들을 사용할 수 있다고 해.
 그리고 Atoms.ts에서 선언한 atom들을 `필요할때마다` 불러와서 사용하면 끝!. `so easy~!!`
 ```javascript
-const isDark = useRecoilValue(설정한 atom이름);
-const setterFn = useSetRecoilState(설정한 atom이름);
+const isDark = useRecoilValue(설정한 atom이름); // Value만 필요하면 이걸 사용하지
+const setterFn = useSetRecoilState(설정한 atom이름); // atom의 value를 변경하는 함수만 필요하면 이걸 써!
 
 ==========OR=============
-const [x, setX] = useRecoilState(설정한 atom이름); // useState()처럼 사용할 수 있어.
+const [x, setX] = useRecoilState(설정한 atom이름); // useState()처럼 사용할 수 있어.(둘 다 사용할 때 이걸 쓰지)
 ```
 `setterFn`은 useState()함수처럼 현재 값을 인자로 받을 수 있어.
+
+```javascript
+const hourSelector = selector({
+    key: "hours",
+    get: ({get}) => {
+        const minutes = get(minuteState);
+        return minutes / 60;
+    },
+    set: ({set}, newValue) => {
+        const minutes = newValue * 60;
+        set(minuteState, minutes); // useRecoilState(hourSelector)을 사용해서 minuteState atom을 수정할 수 있다.
+    }
+})
+```
+이처럼 정의한 `hour atom`이 변할때마다 변화를 감지해주는 `selector`, 마치 `useEffect`처럼 사용이 가능하지.
+또한 `setter`를 사용해서 atom을 굳이 2개 만들지 않고도 하나가 변경되면 나머지도 변경되도록 하는 useEffect나 useMemo같은 기능을 상태관리에서도 사용할 수 있게 됐어!
+
+## react-beautiful-dnd
+
+<img src="https://user-images.githubusercontent.com/2182637/53607406-c8f3a780-3c12-11e9-979c-7f3b5bd1bfbd.gif"/>

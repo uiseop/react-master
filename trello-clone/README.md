@@ -118,7 +118,22 @@ export const toDoSelector = selector({
         ];
     },
 });
+
+export const toDoSelector = selector({
+    key: "toDoSelector",
+    get: ({ get }) => {
+        const todos = get(toDoState);
+        const category = get(categoryState);
+        if (category === Categories.TO_DO)
+            return todos.filter((todo) => todo.category === Categories.TO_DO);
+        if (category === Categories.DOING)
+            return todos.filter((todo) => todo.category === Categories.DOING);
+        if (category === Categories.DONE)
+            return todos.filter((todo) => todo.category === Categories.DONE);
+    },
+});
+
 ```
 여기서 `get`은 options를 인자로 받는데, 이 `options`는 `get`이라는 메서드를 갖고 있어서 `get`으로 `atom`을 가져올 수 있도록 도와줘. 
 
-selector를 사용함으로써 개별적으로 나뉜 atom들을 합칠 수 있는 것. 입맛에 따라
+selector를 사용함으로써 개별적으로 나뉜 `여러개의 atom들`을 합칠 수 있는 것. 입맛에 따라 선택할 수 있지. 
