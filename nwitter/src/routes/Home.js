@@ -1,18 +1,40 @@
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import {
+    addDoc,
+    collection,
+    onSnapshot,
+    orderBy,
+    query,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { dbService } from "../myFirebase";
+import Nweet from "../components/Nweet";
+import { auth, dbService } from "../myFirebase";
 
-const Home = () => {
+const Home = ({ userObj }) => {
     const [tweet, setTweet] = useState("");
     const [tweets, setTweets] = useState([]);
-
-    const getTweets = async () => {
-        const dbTweets = await getDocs(collection(dbService, "tweets"));
-        dbTweets.forEach((doc) => setTweets((cur) => [doc.data(), ...cur]));
-    };
+    // const getTweets = async () => {
+    //     const dbTweets = await getDocs(collection(dbService, "tweets"));
+    //     dbTweets.forEach((doc) => {
+    //         const tweetObj = {
+    //             ...doc.data(),
+    //             id: doc.id,
+    //         };
+    //         setTweets((cur) => [tweetObj, ...cur]);
+    //     });
+    // };
 
     useEffect(() => {
-        getTweets();
+        const q = query(
+            collection(dbService, "tweets"),
+            orderBy("createdAt", "desc")
+        );
+        onSnapshot(q, (snapshot) => {
+            const tweetArr = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setTweets(tweetArr);
+        });
     }, []);
 
     const onSubmit = async (e) => {
@@ -21,6 +43,7 @@ const Home = () => {
             const docRef = await addDoc(collection(dbService, "tweets"), {
                 tweet,
                 createdAt: Date.now(),
+                uid: userObj.uid,
             });
             setTweet("");
             console.log(`Document written with ID: ${docRef.id}`);
@@ -48,6 +71,11 @@ const Home = () => {
                 />
                 <button type="submit">Tweet</button>
             </form>
+            <div>
+                {tweets.map((tweet) => (
+                    <Nweet key={tweet.id} tweetObj={tweet} isOwner={tweet.uid === userObj.uid}/>
+                ))}
+            </div>
         </div>
     );
 };
