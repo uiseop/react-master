@@ -25,7 +25,12 @@ export const auth = getAuth(app);
 ```
 이처럼 `초기화`를 시켜준 뒤, 만든 app에 대한 접근 권한을 가져와. export `auth`한걸로 모든 `firebase`앱에 접근할 수 있는것이지.
 
+## Firebase의 write 기능
+https://firebase.google.com/docs/firestore/quickstart?hl=ko 여기있는 그대로 쓰면돼
+So easy... 그냥 DB만들어주고, 사용한다고 선언해준담에 `collection`과 값을 쓰면 돼
+
 ## Redirect, useHistory의 삭제
 
 Redirect의 삭제로 `Navigate Hook`을 사용해야해.
 Routes에서 마지막 경로로 `<Routes path="*" element={<Navigate replace to="/" />} />`  처럼 사용해야한다.
+
