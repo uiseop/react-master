@@ -27,3 +27,4 @@ yarn-error.log*
 /crypto-tracker/node_modules
 /trello-clone/node_modules
 /nwitter/node_modules
+.env
