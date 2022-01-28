@@ -7,7 +7,10 @@ import {
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import Nweet from "../components/Nweet";
-import { auth, dbService } from "../myFirebase";
+import { dbService, storageService } from "../myFirebase";
+import { ref, uploadString } from "@firebase/storage";
+import { v4 as uuidv4 } from "uuid";
+import { getApp } from "firebase/app";
 
 const Home = ({ userObj }) => {
     const [tweet, setTweet] = useState("");
@@ -52,17 +55,20 @@ const Home = ({ userObj }) => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const docRef = await addDoc(collection(dbService, "tweets"), {
-                tweet,
-                createdAt: Date.now(),
-                uid: userObj.uid,
-            });
-            setTweet("");
-            console.log(`Document written with ID: ${docRef.id}`);
-        } catch (e) {
-            console.log(e);
-        }
+        const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+        const response = await uploadString(fileRef, attachment, "data_url");
+        console.log(response);
+        // try {
+        //     const docRef = await addDoc(collection(dbService, "tweets"), {
+        //         tweet,
+        //         createdAt: Date.now(),
+        //         uid: userObj.uid,
+        //     });
+        //     setTweet("");
+        //     console.log(`Document written with ID: ${docRef.id}`);
+        // } catch (e) {
+        //     console.log(e);
+        // }
     };
 
     const onChange = (e) => {
@@ -73,8 +79,8 @@ const Home = ({ userObj }) => {
     };
 
     const onClearPhotoClick = () => {
-        setAttachment("")
-    }
+        setAttachment("");
+    };
 
     return (
         <div>
