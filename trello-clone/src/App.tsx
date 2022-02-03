@@ -36,7 +36,16 @@ const Card = styled.div`
 
 function App() {
     const [toDos, setTodos] = useRecoilState(toDoState);
-    const onDragEnd = ({ destination, source }: DropResult) => {
+    const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+        if (!destination) return; // 제자리에 다시 둘 경우 그냥 return
+        setTodos((cur) => {
+            const copyTodos = [...cur];
+            // 기존 source의 index의 아이템을 삭제함
+            copyTodos.splice(source.index,1)
+            // draggableId에는 아이템의 내용이 담겨있음. 때문에 다시 splice를 사용해 원 배열을 수정하도록 함.
+            copyTodos.splice(destination?.index, 0 , draggableId)
+            return copyTodos
+        })
     };
     return (
         <>
@@ -50,8 +59,9 @@ function App() {
                                     {...magic.droppableProps}
                                 >
                                     {toDos.map((toDo, index) => (
+                                        // Draggable의 key는 draggableId와 ✅무조건! 같아야 버그가 발생하지 않아. 애초에 key는 index로 두지 마!
                                         <Draggable
-                                            key={index}
+                                            key={toDo}
                                             draggableId={toDo}
                                             index={index}
                                         >

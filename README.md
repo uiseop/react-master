@@ -83,6 +83,11 @@ const hourSelector = selector({
 그러기 위해서는 `DragDropContext`로 감싸주고, `Droppable`영역을 만든 후에 `Draggable`요소들을 작성하면 된다고 합니다.
 
 ```javascript
+/*const onDragEnd = (args: any) => {
+    console.log(argss); -> 드래그 한 정보를 출력해줘. args로다가
+};*/
+const onDragEnd = ({ destination, source }: DropResult) => {};
+
 <DragDropContext onDragEnd={onDragEnd}>
     <div>
         <Droppable droppableId="one">
@@ -115,6 +120,6 @@ const hourSelector = selector({
             )}
         </Droppable>
     </div>
-</DragDropContext>
+</DragDropContext>;
 // 그냥 innerRef랑 droppableProps, draggableProps 객체들만 넘겨준게 끝이야. cool!
 ```
