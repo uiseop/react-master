@@ -23,16 +23,30 @@ const Boards = styled.div`
 
 function App() {
     const [toDos, setTodos] = useRecoilState(toDoState);
-    const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
-        if (!destination) return; // 제자리에 다시 둘 경우 그냥 return
-        /* setTodos((cur) => {
-            const copyTodos = [...cur];
-            // 기존 source의 index의 아이템을 삭제함
-            copyTodos.splice(source.index, 1);
-            // draggableId에는 아이템의 내용이 담겨있음. 때문에 다시 splice를 사용해 원 배열을 수정하도록 함.
-            copyTodos.splice(destination?.index, 0, draggableId);
-            return copyTodos;
-        }); */
+    // destination, source, draggableId
+    const onDragEnd = ({ destination, source, draggableId }: DropResult) => {
+        if (!destination) return;
+        if (destination?.droppableId === source.droppableId) {
+            setTodos((cur) => {
+                const copyBoard = [...cur[source.droppableId]];
+                copyBoard.splice(source.index, 1);
+                copyBoard.splice(destination.index, 0, draggableId);
+                return { ...cur, [source.droppableId]: copyBoard }; // 변수를 Object안에 쓸 경우엔 대괄호안에 씀
+            });
+        } else {
+            setTodos((cur) => {
+                const destBoard = [...cur[destination?.droppableId]];
+                const sourceBoard = [...cur[source.droppableId]];
+                sourceBoard.splice(source.index, 1);
+                destBoard.splice(destination.index, 0, draggableId);
+                return {
+                    ...cur,
+                    [source.droppableId]: sourceBoard,
+                    [destination.droppableId]: destBoard,
+                };
+            });
+            console.log(toDos)
+        }
     };
     return (
         <>
