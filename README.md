@@ -123,3 +123,12 @@ const onDragEnd = ({ destination, source }: DropResult) => {};
 </DragDropContext>;
 // 그냥 innerRef랑 droppableProps, draggableProps 객체들만 넘겨준게 끝이야. cool!
 ```
+
+## React의 마법
+
+React는 그 어떤 컴포넌트들의 State가 바뀌기만 하면 하위의 아이템은 다시 렌더링이 된다.(다시 새로고침이 된다고 보면 돼)
+때문에 루트 컴포넌트가 변경되면, 자연스럽게 하위의 모든 자식 컴포넌트들 또한 재렌더링이 발생하게 돼. 이건 매우 비효율적이야.
+엄청난 기능이지만, 전체를 리렌더링하지 않고, 변경된 부분만 변경시키기 위해서는 어떻게 해야할까?
+변경이 안일어난 부분을 React에게 알려줘야해. `그건 key를 사용하는 이유가 아니였나??` ▶️`react memo`를 사용하면 react에게 props이 변경되지 않는한 이 컴포넌트만은 재렌더링 하지 말아달라고 하는 기능이래!
+
+컴포넌트를 export default 할 때, `React.memo(DragabbleCard)`한다. prop이 변하지 않으면 리렌더링을 할 필요 없음 -> 최적화하는 최적의 방법
