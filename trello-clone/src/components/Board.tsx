@@ -8,6 +8,8 @@ const Wrapper = styled.div`
     background-color: ${(props) => props.theme.boardColor};
     border-radius: 5px;
     min-height: 200px;
+    display: flex;
+    flex-direction: column;
 `;
 
 const Title = styled.h2`
@@ -15,6 +17,22 @@ const Title = styled.h2`
     font-weight: 600;
     margin-bottom: 10px;
     font-size: 18px;
+`;
+
+interface IAreaProps {
+    isDraggingOver: boolean;
+    isDraggingOverFromThis: boolean;
+}
+
+const Area = styled.div<IAreaProps>`
+    background-color: ${(props) =>
+        props.isDraggingOver
+            ? "pink"
+            : props.isDraggingOverFromThis
+            ? "red"
+            : ""};
+    flex-grow: 1;
+    transition: background-color 0.15s ease-in-out;
 `;
 
 interface IBoardProps {
@@ -27,8 +45,15 @@ function Board({ toDos, boardId }: IBoardProps) {
         <Wrapper>
             <Title>{boardId}</Title>
             <Droppable droppableId={boardId}>
-                {(magic) => (
-                    <div ref={magic.innerRef} {...magic.droppableProps}>
+                {(magic, info) => (
+                    <Area
+                        isDraggingOver={info.isDraggingOver}
+                        isDraggingOverFromThis={Boolean(
+                            info.draggingFromThisWith
+                        )}
+                        ref={magic.innerRef}
+                        {...magic.droppableProps}
+                    >
                         {toDos.map((toDo, index) => (
                             // Draggable의 key는 draggableId와 ✅무조건! 같아야 버그가 발생하지 않아. 애초에 key는 index로 두지 마!
                             <DragabbleCard
@@ -39,7 +64,7 @@ function Board({ toDos, boardId }: IBoardProps) {
                         ))}
                         {magic.placeholder}
                         {/* magic.placeholder를 사용해서 카드를 빼도 크기 변화 x */}
-                    </div>
+                    </Area>
                 )}
             </Droppable>
         </Wrapper>
