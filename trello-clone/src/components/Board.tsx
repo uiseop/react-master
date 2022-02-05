@@ -3,7 +3,6 @@ import styled from "styled-components";
 import DragabbleCard from "./DragabbleCard";
 
 const Wrapper = styled.div`
-    padding: 20px 10px;
     padding-top: 10px;
     background-color: ${(props) => props.theme.boardColor};
     border-radius: 5px;
@@ -25,12 +24,13 @@ interface IAreaProps {
 }
 
 const Area = styled.div<IAreaProps>`
+    padding: 20px;
     background-color: ${(props) =>
         props.isDraggingOver
-            ? "pink"
+            ? "#dfe6e9"
             : props.isDraggingOverFromThis
-            ? "red"
-            : ""};
+            ? "#b2bec3"
+            : "transparent"};
     flex-grow: 1;
     transition: background-color 0.15s ease-in-out;
 `;
